@@ -16,7 +16,6 @@ int roll(int dado, int quantidade){
         printf("dado %d valor: %d \n", i+1, valor);
         soma += valor;
     }
-   //printf("*****************************////8/8/8/ valor: %d \n", soma);
 
     return soma;
 }
@@ -61,94 +60,38 @@ int main(int argc, char **argv){
         switch (resposta)
         {
             case 4:
-                // for(int i = 0; i < quantidade; i++){
-                //     sleep(3);
-                //     srand(time(NULL));
-
-                //     dado = rand()%5;
-                //     dado = dado == 0 ? 1: dado;
-                //     resu += dado;
-                //     printf("dado %d valor: %d \n",i+1, dado);
-                // }
+              
                 resu = roll( resposta+1, quantidade);
                 break;
             
             case 6:
-                // for(int i=0; i < quantidade; i++){
-                //     sleep(3);
-                //     srand(time(NULL));
-
-                //     dado = rand()%7;
-                //     dado = dado == 0 ? 1: dado;
-                //     resu += dado;
-                //     printf("dado %d valor: %d \n",i+1, dado);
-                // }
+               
                 resu = roll( resposta+1, quantidade);
 
                 break;
             
             case 8:
-                // for(int i = 0; i < quantidade; i++){
-                //     sleep(3);
-                //     srand(time(NULL));
-
-                //     dado = rand()%9;
-                //     dado = dado == 0 ? 1: dado;
-                //     resu += dado;
-                //     printf("dado %d valor: %d \n",i+1, dado);
-                // }
+               
                 resu = roll( resposta+1, quantidade);
                 break;
             
             case 10:
-                // for(int i= 0; i < quantidade; i++){
-                //     sleep(3);
-                //     srand(time(NULL));
-
-                //     dado = rand()%11;
-                //     dado = dado == 0 ? 1: dado;
-                //     resu += dado;
-                //     printf("dado %d valor: %d \n",i+1, dado);
-                // }
+                
                 resu = roll( resposta+1, quantidade);
                 break;
             
             case 12:
-                // for(int i = 0; i < quantidade; i++){
-                //     sleep(3);
-                //     srand(time(NULL));
-
-                //     dado = rand()%13;
-                //     dado = dado == 0 ? 1: dado;
-                //     resu += dado;
-                //     printf("dado %d valor: %d \n",i+1, dado);
-                // }
+               
                 resu = roll( resposta+1, quantidade);
                 break;
             
             case 20:
-                // for(int i = 0; i < quantidade; i++){
-                //     sleep(3);
-                //     srand(time(NULL));
-
-                //     dado = rand()%21;
-                //     dado = dado == 0 ? 1: dado;
-                //     resu += dado;
-                //     printf("dado %d valor: %d \n",i+1, dado);
-                // }
+                
                 resu = roll( resposta+1, quantidade);
                 break;
 
             case 100:
-                // for(int i = 0; i < quantidade; i++){
-                //     sleep(3);
-                //     srand(time(NULL));
-
-                //     dado = rand()%101;
-                //     dado = dado == 0 ? 1: dado;
-                //     resu += dado;
-                //     printf("dado %d valor: %d \n",i+1, dado);
-                // }
+                
                 resu = roll( resposta+1, quantidade);
                 break;
             
