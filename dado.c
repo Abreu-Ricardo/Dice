@@ -6,8 +6,6 @@
 #include "dice.h"
 
 // VER Dynamic List view em gtk
-
-
 //gcc `pkg-config --cflags gtk+-3.0` dado.c `pkg-config --libs gtk+-3.0`
 
 
@@ -18,7 +16,30 @@ static void botao_clicado(GtkWidget *widget, gpointer data){
     int dado = strtol(string, NULL, 10);
     int valor = roll(dado, 1);
 
-    g_print("d%d valor: %d \n", dado, valor);
+    FILE *history;
+    char *texto;
+    int tam=-1;
+
+    //history = fopen("valores.txt","rw");
+
+    //sprintf(texto, "d%d valor: %d \n", dado, valor);
+    
+    //fprintf(history, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
+    
+    // rewind(history);
+    // fseek(history, 0, SEEK_END);
+
+    // tam = ftell(history);
+    //fscanf(history, "%[^\n]", texto);
+
+    //gtk_text_buffer_set_text (textbuffer, texto, -2);
+
+    //fclose(history);
+    
+    g_print("d%d valor: %d \ntam arq: %d\n", dado, valor, tam);
+
+
+
 }
 
 int main(int argc, char **argv){
@@ -36,19 +57,41 @@ int main(int argc, char **argv){
     gtk_window_set_icon_from_file(GTK_WINDOW(janela), "Icon/Dice.png", NULL);
     g_signal_connect(janela, "destroy", G_CALLBACK(gtk_main_quit), NULL);
 
-    // config da sidebar
-    stack   = gtk_stack_new();
-    sidebar = gtk_stack_sidebar_new();
-    gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR(sidebar), GTK_STACK(stack));
-    //gtk_stack_add_named(GTK_STACK(stack), sidebar, "Barra lateral");
+   
+    // Criando a area de texto
+    GtkWidget *textarea;
+    GtkTextTagTable *tagtable;
+    GtkTextBuffer *textbuffer;
+    GtkTextTag *tag;
+    GtkTextMark *mark;
 
-    GtkWidget *but;
-    but = gtk_button_new_with_label("Botao sidebar");
+    GtkWidget *scroll = gtk_scrolled_window_new(NULL, NULL);
+    GtkWidget *entrada = gtk_entry_new();
 
-    gtk_stack_add_titled(GTK_STACK(stack), but,"titulo de sidebar", "titulo de sidebar");
+
+
+    // Linkando a textarea com o scroll para ter scroll na area de texto
+    textarea = gtk_text_view_new();
+    gtk_container_add(GTK_CONTAINER(scroll), textarea);
+    textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textarea));
+   
+    FILE *f;
+    f = fopen("valores.txt", "rw");
+    fseek(f, 0, SEEK_END);
+    int tam = ftell(f);
+    rewind(f);
     
+    //char *texto = "\n\nHello, this is some text";
+    char *texto = malloc(sizeof(char) * tam);
+    fscanf(f, "%[^'EOF']", texto);
 
+    fclose(f);
 
+    printf("%s\n", texto);
+      
+
+    // Anexando buffer em
+    gtk_text_buffer_set_text (textbuffer, texto, -1);
 
 
     botao[0] = gtk_button_new_with_label("D2");
@@ -95,21 +138,34 @@ int main(int argc, char **argv){
     
     // Botao sair
     // Testar gtk_grid_attach(GTK_GRID(grid), botao[8], 0 ,0 ,1 ,1);
-    gtk_grid_attach(GTK_GRID(grid), botao[8], 6 ,2 ,1 ,1);
+    gtk_grid_attach(GTK_GRID(grid), botao[8], 0 ,0 ,1 ,1);
+
+    // Anexando a area de texto e o scroll
+    //gtk_grid_attach(GTK_GRID(grid), textarea, 0 ,1 ,1 ,1);
+    gtk_grid_attach(GTK_GRID(grid), scroll,  0, 1, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), entrada, 0, 1, 1, 1);
+    
 
     //gtk_grid_set_row_spacing(GTK_GRID(grid), 50);
     gtk_grid_set_column_homogeneous (GTK_GRID(grid), 1);
     gtk_grid_set_row_homogeneous (GTK_GRID(grid), 1);
 
 
-
-    gtk_grid_attach(GTK_GRID(grid), sidebar, 0, 0, 1, 1);
-    gtk_grid_attach(GTK_GRID(grid), stack,   0, 1, 1, 1);
-
     gtk_container_add(GTK_CONTAINER(janela), grid);
 
 
+    // FILE *arquivo;
+    // char t[100];
 
+    // arquivo = fopen("valores.txt", "rw");
+
+    // fprintf(arquivo, "CHAAAMMMAAA\n No Arquivo dado.c\n");
+    
+    // fscanf(arquivo, "%[^'32']s", t);
+
+    // fclose(arquivo);
+
+    // printf("AQUI %s \n", t);
 
     gtk_widget_show_all(janela);
     gtk_main();
