@@ -2,15 +2,19 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "dice.h"
 
 // VER Dynamic List view em gtk
-//gcc `pkg-config --cflags gtk+-3.0` dado.c `pkg-config --libs gtk+-3.0`
+// gcc `pkg-config --cflags gtk+-3.0` dado.c `pkg-config --libs gtk+-3.0`
 // Atualizando dados no arquivo, mas sem mto espaço
 
 GtkTextBuffer *textbuffer;
 char *texto;
+
+time_t hora_da_jogada;
+struct tm *hora;
 
 
 void escreve(int dado, int valor){
@@ -25,10 +29,13 @@ void escreve(int dado, int valor){
     //rewind(history);
 
     //memset(texto, 0, tam);
-    sprintf(texto, "%sd%4d valor: %5d \n", texto, dado, valor); 
+    time(&hora_da_jogada);
+    hora = localtime(&hora_da_jogada);
+
+    sprintf(texto, "%sD%dvalor: %5d   [%d:%d]\n", texto, dado, valor, hora->tm_hour, hora->tm_min); 
     fprintf(history, "%s", texto);
 
-
+    // Erro na formatacao pode ser aqui
     fscanf(history, "%[^'32']", texto);
 
     fclose(history);
@@ -75,6 +82,8 @@ int main(int argc, char **argv){
 
     GtkWidget *scroll = gtk_scrolled_window_new(NULL, NULL);
     GtkWidget *entrada = gtk_entry_new();
+
+    GtkWidget *vbox = gtk_box_new(1, 250);
 
 
 
@@ -128,7 +137,7 @@ int main(int argc, char **argv){
      g_signal_connect( botao[5], "clicked", G_CALLBACK(botao_clicado), (gpointer)"12");
      g_signal_connect( botao[6], "clicked", G_CALLBACK(botao_clicado), (gpointer)"20");
      g_signal_connect( botao[7], "clicked", G_CALLBACK(botao_clicado), (gpointer)"100");
-     g_signal_connect( botao[8], "clicked", G_CALLBACK(gtk_main_quit), NULL);
+     //g_signal_connect( botao[8], "clicked", G_CALLBACK(gtk_main_quit), NULL);
 
 
     grid = gtk_grid_new();
@@ -149,12 +158,16 @@ int main(int argc, char **argv){
     
     // Botao sair
     // Testar gtk_grid_attach(GTK_GRID(grid), botao[8], 0 ,0 ,1 ,1);
-    gtk_grid_attach(GTK_GRID(grid), botao[8], 0 ,0 ,1 ,1);
+    //gtk_grid_attach(GTK_GRID(grid), botao[8], 0 ,0 ,1 ,1);
 
     // Anexando a area de texto e o scroll
     //gtk_grid_attach(GTK_GRID(grid), textarea, 0 ,1 ,1 ,1);
-    gtk_grid_attach(GTK_GRID(grid), scroll,  0, 1, 1, 1);
-    gtk_grid_attach(GTK_GRID(grid), entrada, 0, 1, 1, 1);
+    // gtk_grid_attach(GTK_GRID(grid), scroll,  0, 1, 1, 1);
+    // gtk_grid_attach(GTK_GRID(grid), entrada, 0, 1, 1, 1);
+
+    gtk_box_pack_start(GTK_BOX(vbox), scroll, 1, 1, 1);
+
+    gtk_grid_attach(GTK_GRID(grid), vbox, 0, 0, 1 ,1);
     
 
     //gtk_grid_set_row_spacing(GTK_GRID(grid), 50);
