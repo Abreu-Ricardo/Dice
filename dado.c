@@ -7,6 +7,7 @@
 
 // VER Dynamic List view em gtk
 //gcc `pkg-config --cflags gtk+-3.0` dado.c `pkg-config --libs gtk+-3.0`
+// Atualizando dados no arquivo, mas sem mto espaço
 
 GtkTextBuffer *textbuffer;
 char *texto;
@@ -24,7 +25,7 @@ void escreve(int dado, int valor){
     //rewind(history);
 
     //memset(texto, 0, tam);
-    sprintf(texto, "%sd%d valor: %d \n", texto, dado, valor); 
+    sprintf(texto, "%sd%4d valor: %5d \n", texto, dado, valor); 
     fprintf(history, "%s", texto);
 
 
