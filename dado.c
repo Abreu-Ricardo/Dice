@@ -8,6 +8,32 @@
 // VER Dynamic List view em gtk
 //gcc `pkg-config --cflags gtk+-3.0` dado.c `pkg-config --libs gtk+-3.0`
 
+GtkTextBuffer *textbuffer;
+char *texto;
+
+
+void escreve(int dado, int valor){
+    
+    FILE *history;
+    int tam=-1;
+
+    history = fopen("in.txt","wra+");
+
+    fseek(history, 0, SEEK_END);
+    tam = ftell(history);
+    //rewind(history);
+
+    //memset(texto, 0, tam);
+    sprintf(texto, "%sd%d valor: %d \n", texto, dado, valor); 
+    fprintf(history, "%s", texto);
+
+
+    fscanf(history, "%[^'32']", texto);
+
+    fclose(history);
+
+    gtk_text_buffer_set_text(textbuffer, texto, -1);
+}
 
 static void botao_clicado(GtkWidget *widget, gpointer data){
     //g_print("botao clicado: %s\n", (char *)data);
@@ -16,29 +42,10 @@ static void botao_clicado(GtkWidget *widget, gpointer data){
     int dado = strtol(string, NULL, 10);
     int valor = roll(dado, 1);
 
-    FILE *history;
-    char *texto;
-    int tam=-1;
-
-    //history = fopen("valores.txt","rw");
-
-    //sprintf(texto, "d%d valor: %d \n", dado, valor);
-    
-    //fprintf(history, "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
-    
-    // rewind(history);
-    // fseek(history, 0, SEEK_END);
-
-    // tam = ftell(history);
-    //fscanf(history, "%[^\n]", texto);
-
-    //gtk_text_buffer_set_text (textbuffer, texto, -2);
-
-    //fclose(history);
-    
-    g_print("d%d valor: %d \ntam arq: %d\n", dado, valor, tam);
+    escreve(dado, valor);
 
 
+    g_print("d%d valor: %d \n", dado, valor);
 
 }
 
@@ -61,7 +68,7 @@ int main(int argc, char **argv){
     // Criando a area de texto
     GtkWidget *textarea;
     GtkTextTagTable *tagtable;
-    GtkTextBuffer *textbuffer;
+    // GtkTextBuffer *textbuffer;
     GtkTextTag *tag;
     GtkTextMark *mark;
 
@@ -76,23 +83,26 @@ int main(int argc, char **argv){
     textbuffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(textarea));
    
     FILE *f;
-    f = fopen("valores.txt", "rw");
+    f = fopen("in.txt", "rwa+");
     fseek(f, 0, SEEK_END);
     int tam = ftell(f);
     rewind(f);
     
     //char *texto = "\n\nHello, this is some text";
-    char *texto = malloc(sizeof(char) * tam);
+    texto = malloc(sizeof(char) * tam);
+    
     fscanf(f, "%[^'EOF']", texto);
-
     fclose(f);
 
     printf("%s\n", texto);
+
+    // GtkWidget *label;
+    // label = gtk_label_new("asdad\nasdasd\nasdasd\nasdasd\nasdasd\nasdasda\nsdasd\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad555555555555555555555\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\nasdad\n");
       
 
     // Anexando buffer em
     gtk_text_buffer_set_text (textbuffer, texto, -1);
-
+    //gtk_container_add(GTK_CONTAINER(textarea), label);
 
     botao[0] = gtk_button_new_with_label("D2");
     botao[1] = gtk_button_new_with_label("D4");
